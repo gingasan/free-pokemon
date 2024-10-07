@@ -67,12 +67,12 @@ oppo_pool = {
 }
 
 
-@app.route("/init-state", methods=["POST"])
+@app.route("api/init-state/", methods=["POST"])
 def init_state():
     global user, oppo, battle
 
     init_data = request.get_json()
-    print(init_data)
+
     user = create_role("asset.user.{}".format(init_data["species"]))
     t = rndc(oppo_pool)
     oppo = create_role("asset.user.{}".format(t))
@@ -104,7 +104,6 @@ def get_state():
     move_id = request.args.get("move_id")
     state = step(move_id)
 
-    print(state)
     return jsonify(state)
 
 
