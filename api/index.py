@@ -44,7 +44,7 @@ def step(move1_id):
 
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
 
 
 oppo_pool = {
@@ -69,6 +69,68 @@ oppo_pool = {
 
 @app.route("/api/init-state/", methods=["POST"])
 def init_state():
+    global user, oppo, battle
+
+    init_data = request.get_json()
+
+    user = create_role("asset.user.{}".format(init_data["species"]))
+    t = rndc(oppo_pool)
+    oppo = create_role("asset.user.{}".format(t))
+    battle = Battle(user, oppo)
+
+    battle.start()
+    state = {
+        "pokemon_1": deepcopy(user.state),
+        "pokemon_2": deepcopy(oppo.state),
+    }
+    state["logs"] = battle.get_logs()
+    moves = {}
+    for i, (k, v) in enumerate(user._moves.items()):
+        moves["move_%s" % (i + 1)] = v
+    state["pokemon_1"].update(moves)
+
+    state["pokemon_2"]["species"] = oppo._species
+    state["pokemon_2"]["avatar"] = oppo_pool[n2f(oppo._species)]
+    state["code"] = read("asset/user/{}.py".format(init_data["species"])) + "\n\n\n\n\n\n"
+
+    script = read_json("asset/user/{}.json".format(init_data["species"]))
+    for i, k in enumerate(script["moves"]):
+        state["pokemon_1"]["move_%s" % (i + 1)]["effect"] = script["moves"][k]["effect"]
+
+    return jsonify(state)
+@app.route("/init-state/", methods=["POST"])
+def init_state_1():
+    global user, oppo, battle
+
+    init_data = request.get_json()
+
+    user = create_role("asset.user.{}".format(init_data["species"]))
+    t = rndc(oppo_pool)
+    oppo = create_role("asset.user.{}".format(t))
+    battle = Battle(user, oppo)
+
+    battle.start()
+    state = {
+        "pokemon_1": deepcopy(user.state),
+        "pokemon_2": deepcopy(oppo.state),
+    }
+    state["logs"] = battle.get_logs()
+    moves = {}
+    for i, (k, v) in enumerate(user._moves.items()):
+        moves["move_%s" % (i + 1)] = v
+    state["pokemon_1"].update(moves)
+
+    state["pokemon_2"]["species"] = oppo._species
+    state["pokemon_2"]["avatar"] = oppo_pool[n2f(oppo._species)]
+    state["code"] = read("asset/user/{}.py".format(init_data["species"])) + "\n\n\n\n\n\n"
+
+    script = read_json("asset/user/{}.json".format(init_data["species"]))
+    for i, k in enumerate(script["moves"]):
+        state["pokemon_1"]["move_%s" % (i + 1)]["effect"] = script["moves"][k]["effect"]
+
+    return jsonify(state)
+@app.route("init-state", methods=["POST"])
+def init_state_2():
     global user, oppo, battle
 
     init_data = request.get_json()
