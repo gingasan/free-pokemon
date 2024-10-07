@@ -1,9 +1,11 @@
 {
-    "version": 2,
-    "builds": [
-      { "src": "api/index.py", "use": "@vercel/python", "config": { "maxLambdaSize": "15mb", "runtime": "python3.9"}}
-    ],
-    "routes": [
-      { "src": "/(.*)", "dest": "api/index.py" }
-    ]
-  }
+  "version": 2,
+  "builds": [
+    {"src": "api/index.py", "use": "@vercel/python", "config": { "maxLambdaSize": "15mb", "runtime": "python3.9"}},
+    {"src": "api/engine.py", "use": "@vercel/python", "config": { "maxLambdaSize": "15mb", "runtime": "python3.9"}},
+    {"src": "api/utils.py", "use": "@vercel/python", "config": { "maxLambdaSize": "15mb", "runtime": "python3.9"}}
+  ],
+  "routes": [
+    {"src": "/(.*)", "dest": "api/index.py" }
+  ]
+}
