@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler
-# from flask import Flask, jsonify, request
-# from flask_cors import CORS
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 from engine import *
 from utils import *
 
@@ -43,8 +43,8 @@ def step(move1_id):
     return state
 
 
-# app = Flask(__name__)
-# CORS(app)
+app = Flask(__name__)
+CORS(app)
 
 
 oppo_pool = {
@@ -75,15 +75,7 @@ def init_state():
     print(init_data)
     user = create_role("asset.user.{}".format(init_data["species"]))
     t = rndc(oppo_pool)
-    try:
-        oppo = {
-            "Blaziken": BlazikenAgent(),
-            "Lucario": LucarioAgent(),
-            "TingLu": TingLuAgent(),
-            "Graphal": GraphalAgent()
-        }[t]
-    except KeyError:
-        oppo = create_role("asset.user.{}".format(t))
+    oppo = create_role("asset.user.{}".format(t))
     battle = Battle(user, oppo)
 
     battle.start()
