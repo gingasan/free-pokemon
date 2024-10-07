@@ -1,8 +1,8 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from http.server import BaseHTTPRequestHandler
+# from flask import Flask, jsonify, request
+# from flask_cors import CORS
 from engine import *
 from utils import *
-from agent import *
 
 
 def create_role(code_path):
@@ -19,10 +19,7 @@ def step(move1_id):
     if user.isfaint() or oppo.isfaint():
         return
     battle.logger.clr()
-    if isinstance(oppo, PokemonAgent):
-        move2_id = oppo.plan()
-    else:
-        move2_id = rndc(oppo.get_moves())
+    move2_id = rndc(oppo.get_moves())
     state = battle.act(move1_id, move2_id)
     for phase in ["phase_1", "phase_2"]:
         if state[phase]:
@@ -46,8 +43,8 @@ def step(move1_id):
     return state
 
 
-app = Flask(__name__)
-CORS(app)
+# app = Flask(__name__)
+# CORS(app)
 
 
 oppo_pool = {
