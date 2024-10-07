@@ -1,5 +1,5 @@
 function initState(init_data) {
-    fetch("http://127.0.0.1:5000/init-state", {
+    fetch("https://free-pokemon.vercel.app/init-state", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -122,7 +122,7 @@ function updateStatePhase(data) {
 }
 
 function updateState(move_id) {
-    fetch(`http://127.0.0.1:5000/get-state?move_id=${move_id}`)
+    fetch(`https://free-pokemon.vercel.app/get-state?move_id=${move_id}`)
         .then(response => response.json())
         .then(data => {
             // hide move selector
